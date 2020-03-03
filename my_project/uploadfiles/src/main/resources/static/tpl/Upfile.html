@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title id="title">文件上传</title>
+</head>
+<body>
+<div>
+    <div id="updiv">
+        <span>
+            <input type="file" id="image">
+        </span>
+        <span>
+            <button onclick="upload_files()">上传</button>
+        </span>
+    </div>
+
+    <div></div>
+    <div id="showImage">
+        <div><p>图片展示</p></div>
+        <div id="imgs"></div>
+    </div>
+</div>
+<div></div>
+<div></div>
+<div></div>
+<div>
+    <div>
+        <button onclick="callBackMain()">返回主页</button>
+    </div>
+</div>
+
+
+<script src="/js/jquery/jquery-3.4.1.js"></script>
+<script>
+    /**
+     * 解析路劲
+     * @param name
+     * @returns {*}
+     */
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg); //匹配目标参数
+        if (r != null) return unescape(r[2]);
+        return null; //返回参数值
+    }
+
+    let urlParam = getUrlParam("show");
+    console.log(urlParam)
+    if (urlParam == 'hide') {
+        $('#title').text('文件上传')
+        $('#showImage').hide()
+        $('#updiv').show()
+        findAll()
+
+    } else {
+        $('#title').text('图片展示')
+        $('#updiv').hide()
+        $('#showImage').show()
+        findAll()
+    }
+
+    //  图片上传
+    function upload_files() {
+        let formData = new FormData();
+        let file = document.getElementById("image").files[0]
+        console.log(file)
+        formData.append("file", file);
+
+        $.ajax({
+            url: '/upload/files',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (res) {
+                console.log(res)
+                callBackMain()
+            }
+        })
+    }
+
+    //  查询展示
+    function findAll() {
+        $.get('/upload/findAll', function (res) {
+            console.log(res)
+            let data = res.data;
+            let str = ''
+            if (data != null) {
+               $.each(data, function (i, item) {
+                   console.log(item)
+                   str += `<img src="${item}"/>`
+               })
+            }
+            $('#imgs').html(str)
+        })
+    }
+</script>
+
+<script>
+    //  返回主页
+    function callBackMain() {
+        location.href = "/index.html";
+    }
+</script>
+
+
+</body>
+</html>

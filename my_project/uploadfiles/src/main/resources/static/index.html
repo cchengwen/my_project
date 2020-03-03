@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+</head>
+<body>
+<div>
+    <div>
+        <button onclick="fileUpload()">文件上传</button>
+    </div>
+
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+
+    <div>
+        <button onclick="showFiles()">图片展示</button>
+    </div>
+</div>
+
+<script src="/js/jquery/jquery-3.4.1.js"></script>
+<script>
+    function fileUpload() {
+        location.href = "/tpl/Upfile.html?show=hide"
+    }
+
+    function showFiles() {
+        location.href = "/tpl/Upfile.html?show=show"
+    }
+</script>
+</body>
+</html>
